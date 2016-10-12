@@ -9,8 +9,6 @@
 	<script type="text/javascript" src="digit.js"></script>
 	<script type="text/javascript">
 	//设置时间
-	const endTime=new Date();
-	endTime.setTime(endTime.getTime()+3600*1000)
 	var curShowTimeSeconds=0;
 	//存储数字上生成小球
 	var balls=[];
@@ -40,9 +38,7 @@
 	}
 	function getCurrentShowTimeSeconds(){
 		var curTime=new Date();
-		var ret=endTime.getTime()-curTime.getTime();
-		//Math.round四舍五入
-		ret=Math.round(ret/1000);
+		var ret=curTime.getHours()*3600+curTime.getMinutes()*60+curTime.getSeconds();
 		return ret>0? ret:0;
 	}
 	function update(){
