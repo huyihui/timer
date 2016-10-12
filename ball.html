@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<!--
+	运动学效果
+	-->
+	<canvas id="canvas"  style="border:1px solid #aaa;display:block;margin:50px auto;">请升级浏览器</canvas>
+	<script type="text/javascript">
+	//设置小球
+	var ball={x:512,y:100,r:13,g:2,vx:-4,vy:-15,color:"blue"};
+	var WINDOW_WIDTH=1024
+	var WINDOW_HEIGHT=440
+	window.onload=function(){
+		var canvas=document.getElementById("canvas");
+		//设置画布像素大小
+		canvas.width=WINDOW_WIDTH;
+		canvas.height=WINDOW_HEIGHT;
+		//获取context
+		var context=canvas.getContext("2d");
+		setInterval(
+			function(){
+				reader(context);
+				update();
+			}
+			,
+			50
+			);
+	};
+	//描述坐标 
+	function update(){
+		ball.x += ball.vx;
+		ball.y += ball.vy;
+		ball.vy += ball.g;
+		if(ball.y>=440-ball.r){
+			ball.y=440-ball.r;
+			//-速度衰减
+			ball.vy=-ball.vy*0.4;
+
+		}
+	}
+	//绘制小球
+	function reader(cxt){
+		//清除范围内的画布
+		cxt.clearRect(0,0,cxt.canvas.width,cxt.canvas.height);
+		//设置小球颜色
+		cxt.fillStyle=ball.color;
+		//开始绘制
+		cxt.beginPath();
+		cxt.arc(ball.x,ball.y,ball.r,0,2*Math.PI);
+		cxt.closePath();
+		cxt.fill();
+
+	}
+	</script>
+</body>
+</html>
