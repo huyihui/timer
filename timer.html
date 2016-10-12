@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height:100%;">
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
 </head>
-<body>
-	<canvas id="canvas">请升级浏览器</canvas>
+<body style="height:100%;margin:0;padding:0;">
+	<canvas id="canvas" style="height:100%">请升级浏览器</canvas>
 	<script type="text/javascript" src="digit.js"></script>
 	<script type="text/javascript">
-	var WINDOW_WIDTH=1340;
-	var WINDOW_HEIGHT=640;
-	var RADIUS=8;
-	var MARGIN_TOP=60;
-	var MARGIN_LEFT=30;
 	//设置时间
-	const endTime=new Date(2016,9,12,15,43,34);
+	const endTime=new Date(2016,9,12,24,43,34);
 	var curShowTimeSeconds=0;
 	//存储数字上生成小球
 	var balls=[];
 	const colors=["#5520EB","#03FFA1","#090909","#F01E1E","#D0F01E","#1ED0F0","#FFC666","#8C7F93","#626262","#2ABB6A"];
 	window.onload=function(){
+		WINDOW_WIDTH=document.body.clientWidth;
+		WINDOW_HEIGHT=document.body.clientHeight;
+		MARGIN_LEFT=Math.round(WINDOW_WIDTH/10);
+		RADIUS=Math.round(WINDOW_WIDTH*4/5/108)-1;
+		MARGIN_TOP=Math.round(WINDOW_HEIGHT/5);
+
 		var canvas=document.getElementById("canvas");
 		canvas.width=WINDOW_WIDTH;
 		canvas.height=WINDOW_HEIGHT;
@@ -33,7 +34,7 @@
 				update();
 			}
 			,
-			50
+			40
 			);
 	}
 	function getCurrentShowTimeSeconds(){
@@ -84,9 +85,11 @@
 
 		}
 		updateBalls();
+		// console.log(balls.length);
 	}
 	//小球运动
 	function updateBalls(){
+		var cnt=0;
 		for (var i = 0; i < balls.length; i++) {
 			balls[i].x+=balls[i].vx;
 			balls[i].y+=balls[i].vy;
@@ -95,12 +98,19 @@
 			if(balls[i].y>=WINDOW_HEIGHT-RADIUS){
 				balls[i].y=WINDOW_HEIGHT-RADIUS;
 				//-速度衰减
-				balls[i].vy=-balls[i].vy*0.75;
+				balls[i].vy=-balls[i].vy*0.50;
 			}
 		}
+		//保留小球	
+		var cnt=0;	
+		for(var i = 0; i < balls.length; i++){
+			if(	balls[i].x+RADIUS>0&&balls[i].x-RADIUS<WINDOW_WIDTH){
+				balls[cnt++]=balls[i];
+			}}
+		while(balls.length>Math.min(300,cnt)){
+			balls.pop();
+		}
 	}
-
-
 	//运动小球的信息声明
 	function addBalls(x,y,num){
 		for (var i = 0; i < digit[num].length; i++) {
@@ -109,13 +119,14 @@
 					var aBall={
 						x:x+j*2*(RADIUS+1)+(RADIUS+1),
 						y:y+i*2*(RADIUS+1)+(RADIUS+1),
-						g:1.5+Math.random(),
+						g:2.5+Math.random(),
 						//取-4或4
 						vx:Math.pow(-1,Math.ceil(Math.random()*1000))*4,
 						vy:-5,
 						color:colors[Math.floor(Math.random()*colors.length)],
 					}
 					balls.push(aBall);
+
 				}
 			}
 		}
